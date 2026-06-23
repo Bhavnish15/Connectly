@@ -1,6 +1,7 @@
 package com.major.project.airBnbApp.controller;
 
 import com.major.project.airBnbApp.dto.HotelDto;
+import com.major.project.airBnbApp.exception.UnauthorizedException;
 import com.major.project.airBnbApp.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,25 +26,25 @@ public class HotelController {
     }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<HotelDto> getHotelById(@PathVariable Long hotelId){
+    public ResponseEntity<HotelDto> getHotelById(@PathVariable Long hotelId) throws UnauthorizedException {
         HotelDto hotelDto = hotelService.getHotelById(hotelId);
         return ResponseEntity.ok(hotelDto);
     }
 
     @PutMapping("/{hotelId}")
-    public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long hotelId, @RequestBody HotelDto hotelDto){
+    public ResponseEntity<HotelDto> updateHotelById(@PathVariable Long hotelId, @RequestBody HotelDto hotelDto) throws UnauthorizedException {
         HotelDto hotel = hotelService.updateHotelById(hotelId, hotelDto);
         return ResponseEntity.ok(hotel);
     }
 
     @DeleteMapping("/{hotelId}")
-    public ResponseEntity<Void> DeleteHotel(@PathVariable Long hotelId){
+    public ResponseEntity<Void> DeleteHotel(@PathVariable Long hotelId) throws UnauthorizedException {
         hotelService.DeleteHotelById(hotelId);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{hotelId}/activate")
-    public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId){
+    public ResponseEntity<Void> activateHotel(@PathVariable Long hotelId) throws UnauthorizedException {
         hotelService.activateHotel(hotelId);
         return ResponseEntity.noContent().build();
     }
