@@ -38,6 +38,13 @@ public class WebSecurityConfig {
                         .authorizeHttpRequests (auth -> auth
                                 .requestMatchers("/admin/**").hasRole("HOTEL_MANAGER")
                                 .requestMatchers("/bookings/**").authenticated()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources/**",
+                                        "/webjars/**"
+                                ).permitAll()
                                 .anyRequest().permitAll()
                         ))
                 .exceptionHandling(exceptionHandler -> exceptionHandler.accessDeniedHandler(accessDeniedHandler()
