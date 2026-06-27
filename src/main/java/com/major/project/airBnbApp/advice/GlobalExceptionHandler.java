@@ -2,6 +2,7 @@ package com.major.project.airBnbApp.advice;
 
 import com.major.project.airBnbApp.exception.ResourceNotFoundException;
 import io.jsonwebtoken.JwtException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -38,6 +39,10 @@ public class GlobalExceptionHandler {
         return buildErrorResponseEntity(apiError);
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDuplicate() {
+        return ResponseEntity.badRequest().body("Email already exists");
+    }
 
 //    @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<?>> handleInternalServerError(Exception exception){

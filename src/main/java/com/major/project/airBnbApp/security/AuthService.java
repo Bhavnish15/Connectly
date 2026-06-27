@@ -9,11 +9,13 @@ import com.major.project.airBnbApp.exception.ResourceNotFoundException;
 import com.major.project.airBnbApp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
 
@@ -31,7 +33,7 @@ public class AuthService {
 
         User user = userRepository.findByEmail(signUpRequestDto.getEmail()).orElse(null);
         if(user != null){
-            throw  new RuntimeException("User is already present.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User already exists");
         }
         User newUser = modelMapper.map(signUpRequestDto, User.class);
         newUser.setRoles(Set.of(Role.GUEST));
@@ -58,7 +60,7 @@ public class AuthService {
     public String refreshToken(String refreshToken){
         Long id = jwtService.getUserIdFromToken(refreshToken);
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not Found with "+ id));
-        return jwtService.generateRefreshToken(user);
+        return jwtService.generateAccessToken(user);
     }
 }
 
